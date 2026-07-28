@@ -4,15 +4,6 @@ A modern full-stack **Project Management System** built using the **MERN Stack (
 
 ---
 
-## 📸 Screenshots
-
-> Add screenshots of your application here.
-
-| Dashboard | Project Details |
-|-----------|-----------------|
-| ![Dashboard](screenshots/dashboard.png) | ![Project](screenshots/project.png) |
-
----
 
 # ✨ Features
 
