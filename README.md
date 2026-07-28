@@ -1,100 +1,254 @@
-# Project Management MERN
+# 🚀 Project Management System
 
-[Project Management MERN](https://github.com/biswadeep-roy/Project-Management-MERN/raw/main/client/src/assets/images/project-management-mern.png)
+A modern full-stack **Project Management System** built using the **MERN Stack (MongoDB, Express.js, React.js, Node.js)**. The application enables teams to collaborate efficiently by managing projects, assigning tasks, tracking progress, and communicating in real time through an intuitive and responsive interface.
 
-This is a comprehensive Project Management system built using the MERN (MongoDB, Express, React, and Node) stack, powered by Bootstrap for the frontend interface. The Project Management MERN repository is a powerful tool for managing your projects, tasks, and teams effectively.
+---
 
+## 📸 Screenshots
 
+> Add screenshots of your application here.
 
-![project_tracker](https://github.com/biswadeep-roy/Project-Management-MERN/assets/74821633/59a699db-ab0e-4f24-9cc4-cd7a0943d0df)
+| Dashboard | Project Details |
+|-----------|-----------------|
+| ![Dashboard](screenshots/dashboard.png) | ![Project](screenshots/project.png) |
 
-## Features
+---
 
-- User Authentication: Secure user registration and login system.
-- Project Management: Create, update, and delete projects.
-- Task Management: Create, update, and delete tasks within each project.
-- User Management: Invite team members to collaborate on projects.
-- Real-time Updates: Utilizes WebSockets for real-time project and task updates.
-- Dashboard: A user-friendly dashboard to manage your projects and tasks.
-- Task Prioritization: Assign priorities to tasks to manage work efficiently.
-- Responsive Design: The application is designed to work seamlessly on various devices.
+# ✨ Features
 
-## Installation
+## 🔐 Authentication & Authorization
+- Secure JWT Authentication
+- User Registration & Login
+- Protected Routes
+- Role-Based Access Control (Admin & Members)
 
-To run this project locally, follow these steps:
+## 📁 Project Management
+- Create, Update, and Delete Projects
+- Invite Team Members
+- Manage Project Information
+- Project Ownership
 
-1. Clone the repository:
-``` bash
-git clone https://github.com/biswadeep-roy/Project-Management-MERN.git
+## ✅ Task Management
+- Create Tasks
+- Edit & Delete Tasks
+- Assign Tasks to Team Members
+- Task Priority (Low, Medium, High)
+- Task Status (Todo, In Progress, Completed)
+- Due Date Management
+
+## 👥 Team Collaboration
+- Invite Members to Projects
+- Manage Team Members
+- Real-time Notifications
+- Activity Tracking
+
+## 📊 Dashboard
+- Project Statistics
+- Task Progress Overview
+- Pending vs Completed Tasks
+- Recent Activities
+
+## 🔔 Notifications
+- Project Invitations
+- Task Assignment Notifications
+- Status Update Notifications
+
+## 🎨 UI Features
+- Responsive Design
+- Clean Dashboard
+- Loading Indicators
+- Form Validation
+- Mobile Friendly
+
+---
+
+# 🛠 Tech Stack
+
+### Frontend
+- React.js
+- Redux Toolkit
+- React Router DOM
+- Axios
+- Ant Design
+- CSS3
+
+### Backend
+- Node.js
+- Express.js
+- JWT Authentication
+- Bcrypt.js
+- Multer
+
+### Database
+- MongoDB
+- Mongoose
+
+### Cloud Storage
+- Cloudinary
+
+---
+
+# 📂 Folder Structure
+
 ```
-## 
-2. Install server dependencies:
+ProjectManagement
+│
+├── client
+│   ├── public
+│   ├── src
+│   │   ├── components
+│   │   ├── pages
+│   │   ├── redux
+│   │   ├── apicalls
+│   │   └── utils
+│
+├── server
+│   ├── config
+│   ├── middlewares
+│   ├── models
+│   ├── routes
+│   └── server.js
+│
+└── README.md
+```
 
-``` bash
+---
+
+# ⚙ Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/purushotham-07/Project-Management.git
+```
+
+Move into the project directory:
+
+```bash
+cd Project-Management
+```
+
+---
+
+## Install Backend
+
+```bash
 cd server
 npm install
-``1
+```
 
+---
 
-## 3. Install client dependencies:
+## Install Frontend
 
-``` bash
+```bash
 cd ../client
 npm install
 ```
 
-## 
-4. Start the server:
+---
 
+## Environment Variables
 
-``` bash
-cd ../server
+Create a `.env` file inside the **server** folder.
+
+```env
+PORT=5000
+
+MONGO_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_secret_key
+
+NODE_ENV=development
+
+CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+---
+
+## Run Backend
+
+```bash
+cd server
+npm run dev
+```
+
+---
+
+## Run Frontend
+
+```bash
+cd client
 npm start
 ```
 
-## 
-5. Start the client:
+The application will run at:
 
-``` bash
-cd ../client
-npm start
+```
+Frontend : http://localhost:3000
+Backend  : http://localhost:5000
 ```
 
+---
 
-6. Open your web browser and navigate to `http://localhost:3000` to access the Project Management MERN application.
+# 📌 Future Enhancements
 
-## Configuration
+- Kanban Board
+- File Attachments
+- Comments on Tasks
+- Email Notifications
+- Calendar View
+- Project Timeline
+- Advanced Search & Filters
+- Export Reports (PDF/Excel)
+- Dark Mode
 
-- The server expects a `config.env` file in the `/server/config/` directory. You should define the following variables:
-- `MONGODB_URI`: MongoDB connection URI
-- `JWT_SECRET`: Secret key for JSON Web Tokens
-- `NODE_ENV`: Either "development" or "production"
-- `PORT`: Port number for the server (default is 5000)
-- `WS_PORT`: Port number for WebSockets (default is 5001)
+---
 
-## Contributing
+# 🤝 Contributing
 
-We welcome contributions to enhance the functionality and usability of this project. If you want to contribute, please follow these steps:
+Contributions are welcome!
 
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and test thoroughly.
-4. Commit your changes with clear and concise messages.
-5. Push your changes to your forked repository.
-6. Create a pull request to the main repository.
+1. Fork this repository
+2. Create a feature branch
 
-Please ensure that your code follows the coding standards and includes relevant documentation.
+```bash
+git checkout -b feature-name
+```
 
-## License
+3. Commit changes
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+```bash
+git commit -m "Added new feature"
+```
 
-## Contact
+4. Push to GitHub
 
-If you have any questions or need further assistance, feel free to contact the project maintainer:
+```bash
+git push origin feature-name
+```
 
-- Biswadeep Roy
-- Email: biswadeeproy1230@gmail.com
-- GitHub: [https://github.com/biswadeep-roy](https://github.com/biswadeep-roy)
+5. Open a Pull Request
 
-Happy Project Management with MERN! 🚀🔧📊
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+# 👨‍💻 Developer
+
+**Purushotham Reddy**
+
+- GitHub: https://github.com/purushotham-07
+- LinkedIn: https://www.linkedin.com/in/purushotham-reddy-4b94b2355
+
+---
+
+## ⭐ Support
+
+If you found this project useful, please consider giving it a ⭐ on GitHub.
