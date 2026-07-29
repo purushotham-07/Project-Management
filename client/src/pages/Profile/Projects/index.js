@@ -22,7 +22,7 @@ function Projects() {
       if (response.success) {
         setProjects(response.data);
       } else {
-        throw new Error(response.error);
+        throw new Error(response.message);
       }
       dispatch(SetLoading(false));
     } catch (error) {
@@ -39,7 +39,7 @@ function Projects() {
         message.success(response.message);
         getData();
       } else {
-        throw new Error(response.error);
+        throw new Error(response.message);
       }
       dispatch(SetLoading(false));
     } catch (error) {

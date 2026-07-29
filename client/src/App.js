@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import ProjectInfo from "./pages/ProjectInfo";
 import Register from "./pages/Register";
+import Discover from "./pages/Discover";
 
 function App() {
   const { loading } = useSelector((state) => state.loaders);
@@ -36,6 +37,14 @@ function App() {
             element={
               <ProtectedPage>
                 <Profile />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/discover"
+            element={
+              <ProtectedPage>
+                <Discover />
               </ProtectedPage>
             }
           />

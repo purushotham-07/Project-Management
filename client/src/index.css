@@ -36,7 +36,7 @@ input:focus , textarea:focus , select:focus {
 }
 
 .ant-form-item {
-  margin-bottom: 10 !important;
+  margin-bottom: 10px !important;
 }
 .ant-form-item-label {
   padding: 0 !important;

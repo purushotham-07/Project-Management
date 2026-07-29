@@ -1,12 +1,11 @@
-import { Button, Form, Input, message, Modal, Tabs, Upload } from "antd";
+import { Button, Form, Input, message, Modal, Tabs, Upload, Select, DatePicker } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddNotification } from "../../../apicalls/notifications";
 import { CreateTask, UpdateTask, UploadImage } from "../../../apicalls/tasks";
 import { SetLoading } from "../../../redux/loadersSlice";
 import "./TaskForm.css"
-
 
 function TaskForm({
   showTaskForm,
@@ -15,26 +14,30 @@ function TaskForm({
   task,
   reloadData,
 }) {
-  const [selectedTab = "1", setSelectedTab] = React.useState("1");
+  const [selectedTab, setSelectedTab] = React.useState("1");
   const [email, setEmail] = React.useState("");
   const { user } = useSelector((state) => state.users);
   const formRef = React.useRef(null);
-  const [file = null, setFile] = React.useState(null);
-  const [images = [], setImages] = React.useState(task?.attachments || []);
+  const [file, setFile] = React.useState(null);
+  const [images, setImages] = React.useState(task?.attachments || []);
   const dispatch = useDispatch();
 
   const onFinish = async (values) => {
     try {
       let response = null;
+      const payload = { ...values };
+      if (payload.dueDate) {
+        payload.dueDate = payload.dueDate.toISOString();
+      }
+
       const assignedToMember = project.members.find(
         (member) => member.user.email === email
       );
       const assignedToUserId = assignedToMember.user._id;
       dispatch(SetLoading(true));
       if (task) {
-        // update task
         response = await UpdateTask({
-          ...values,
+          ...payload,
           project: project._id,
           assignedTo: task.assignedTo._id,
           _id: task._id,
@@ -42,7 +45,7 @@ function TaskForm({
       } else {
         const assignedBy = user._id;
         response = await CreateTask({
-          ...values,
+          ...payload,
           project: project._id,
           assignedTo: assignedToUserId,
           assignedBy,
@@ -51,7 +54,6 @@ function TaskForm({
 
       if (response.success) {
         if (!task) {
-          // send notification to the assigned employee
           AddNotification({
             title: `You have been assigned a new task in ${project.name}`,
             user: assignedToUserId,
@@ -148,13 +150,28 @@ function TaskForm({
               assignedTo: task ? task.assignedTo.email : "",
             }}
           >
-            <Form.Item label="Task Name" name="name">
+            <Form.Item label="Task Name" name="name" rules={[{ required: true, message: "Task name is required" }]}>
               <Input />
             </Form.Item>
 
-            <Form.Item label="Task Description" name="description">
+            <Form.Item label="Task Description" name="description" rules={[{ required: true, message: "Description is required" }]}>
               <TextArea />
             </Form.Item>
+
+            <div className="grid grid-cols-2 gap-5">
+              <Form.Item label="Priority" name="priority">
+                <Select>
+                  <Select.Option value="Low">Low</Select.Option>
+                  <Select.Option value="Medium">Medium</Select.Option>
+                  <Select.Option value="High">High</Select.Option>
+                  <Select.Option value="Urgent">Urgent</Select.Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item label="Due Date" name="dueDate">
+                <DatePicker className="w-full" />
+              </Form.Item>
+            </div>
 
             <Form.Item label="Assign To" name="assignedTo">
               <Input

@@ -1,4 +1,4 @@
-import { Button, message, Modal, Table } from "antd";
+import { Button, message, Modal, Table, Tag, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteTask, GetAllTasks, UpdateTask } from "../../../apicalls/tasks";
@@ -7,10 +7,12 @@ import { getDateFormat } from "../../../utils/helpers";
 import Divider from "../../../components/Divider";
 import TaskForm from "./TaskForm";
 import { AddNotification } from "../../../apicalls/notifications";
+import Kanban from "../Kanban";
+import Comments from "../../../components/Comments";
 import "./Tasks.css";
 
 
-function Tasks({ project }) {
+function Tasks({ project, currentUserRole }) {
   const [filters, setFilters] = useState({
     status: "all",
     assignedTo: "all",
@@ -22,9 +24,8 @@ function Tasks({ project }) {
   const [showTaskForm, setShowTaskForm] = React.useState(false);
   const [task, setTask] = React.useState(null);
   const dispatch = useDispatch();
-  const isEmployee = project.members.find(
-    (member) => member.role === "employee" && member.user._id === user._id
-  );
+  const isEmployee = currentUserRole === "employee";
+  const canManageTasks = currentUserRole === "owner" || currentUserRole === "admin";
 
   const getTasks = async () => {
     try {
@@ -92,6 +93,13 @@ function Tasks({ project }) {
     getTasks();
   }, []);
 
+  const priorityColorMap = {
+    Low: "green",
+    Medium: "blue",
+    High: "orange",
+    Urgent: "red",
+  };
+
   const columns = [
     {
       title: "Name",
@@ -109,19 +117,31 @@ function Tasks({ project }) {
       ),
     },
     {
+      title: "Priority",
+      dataIndex: "priority",
+      render: (text) => (
+        <Tag color={priorityColorMap[text] || "default"}>{text || "Medium"}</Tag>
+      ),
+    },
+    {
+      title: "Due Date",
+      dataIndex: "dueDate",
+      render: (text) => (text ? getDateFormat(text) : "-"),
+    },
+    {
       title: "Assigned To",
       dataIndex: "assignedTo",
       render: (text, record) =>
-        record.assignedTo.firstName + " " + record.assignedTo.lastName,
+        record.assignedTo ? record.assignedTo.firstName + " " + record.assignedTo.lastName : "-",
     },
     {
       title: "Assigned By",
       dataIndex: "assignedBy",
       render: (text, record) =>
-        record.assignedBy.firstName + " " + record.assignedBy.lastName,
+        record.assignedBy ? record.assignedBy.firstName + " " + record.assignedBy.lastName : "-",
     },
     {
-      title: "Assigned On",
+      title: "Created On",
       dataIndex: "createdAt",
       render: (text, record) => getDateFormat(text),
     },
@@ -138,12 +158,11 @@ function Tasks({ project }) {
                 status: e.target.value,
               });
             }}
-            disabled={record.assignedTo._id !== user._id && isEmployee}
+            disabled={record.assignedTo?._id !== user._id && isEmployee}
           >
-            <option value="pending">Pending</option>
-            <option value="inprogress">In Progress</option>
-            <option value="completed">Completed</option>
-            <option value="closed">Closed</option>
+            <option value="To Do">To Do</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Done">Done</option>
           </select>
         );
       },
@@ -179,6 +198,7 @@ function Tasks({ project }) {
     },
   ];
 
+  // Only employees can't see action column; hide for employees
   if (isEmployee) {
     columns.pop();
   }
@@ -186,17 +206,36 @@ function Tasks({ project }) {
   useEffect(() => {
     getTasks();
   }, [filters]);
+
+  const [viewMode, setViewMode] = useState("table");
+
   return (
     <div>
-      {!isEmployee && (
-        <div className="flex justify-end">
+      <div className="flex justify-between items-center">
+        <div className="flex gap-2">
+          <Button
+            type={viewMode === "table" ? "primary" : "default"}
+            size="small"
+            onClick={() => setViewMode("table")}
+          >
+            Table
+          </Button>
+          <Button
+            type={viewMode === "kanban" ? "primary" : "default"}
+            size="small"
+            onClick={() => setViewMode("kanban")}
+          >
+            Kanban
+          </Button>
+        </div>
+        {canManageTasks && (
           <Button type="default" onClick={() => setShowTaskForm(true)}>
             Add Task
           </Button>
-        </div>
-      )}
+        )}
+      </div>
 
-      <div className="flex gap-5">
+      <div className="flex gap-5 mt-5 flex-wrap">
         <div>
           <span>Status</span>
           <select
@@ -209,9 +248,9 @@ function Tasks({ project }) {
             }}
           >
             <option value="all">All</option>
-            <option value="pending">Pending</option>
-            <option value="inprogress">In Progress</option>
-            <option value="completed">Completed</option>
+            <option value="To Do">To Do</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Done">Done</option>
           </select>
         </div>
 
@@ -230,7 +269,7 @@ function Tasks({ project }) {
             {project.members
               .filter((m) => m.role === "admin" || m.role === "owner")
               .map((m) => (
-                <option value={m.user._id}>
+                <option value={m.user._id} key={m.user._id}>
                   {m.user.firstName + " " + m.user.lastName}
                 </option>
               ))}
@@ -252,7 +291,7 @@ function Tasks({ project }) {
             {project.members
               .filter((m) => m.role === "employee")
               .map((m) => (
-                <option value={m.user._id}>
+                <option value={m.user._id} key={m.user._id}>
                   {m.user.firstName + " " + m.user.lastName}
                 </option>
               ))}
@@ -260,7 +299,16 @@ function Tasks({ project }) {
         </div>
       </div>
 
-      <Table columns={columns} dataSource={tasks} className="mt-5" />
+      {viewMode === "table" ? (
+        <Table columns={columns} dataSource={tasks} className="mt-5" rowKey="_id" />
+      ) : (
+        <Kanban
+          tasks={tasks}
+          project={project}
+          reloadData={getTasks}
+          currentUserRole={currentUserRole}
+        />
+      )}
 
       {showTaskForm && (
         <TaskForm
@@ -290,10 +338,25 @@ function Tasks({ project }) {
               {task.description}
             </span>
 
-            <div className="flex gap-5">
-              {task.attachments.map((image) => {
+            {task.priority && (
+              <div className="mt-2">
+                <span className="text-sm font-semibold">Priority: </span>
+                <Tag color={priorityColorMap[task.priority]}>{task.priority}</Tag>
+              </div>
+            )}
+
+            {task.dueDate && (
+              <div className="mt-1">
+                <span className="text-sm font-semibold">Due Date: </span>
+                <span className="text-sm">{getDateFormat(task.dueDate)}</span>
+              </div>
+            )}
+
+            <div className="flex gap-5 mt-2">
+              {task.attachments.map((image, index) => {
                 return (
                   <img
+                    key={index}
                     src={image}
                     alt=""
                     className="w-40 h-40 object-cover mt-2 p-2 border border-solid rounded border-gray-500"
@@ -301,6 +364,10 @@ function Tasks({ project }) {
                 );
               })}
             </div>
+
+            <Divider />
+            <span className="text-sm font-semibold text-gray-700">Comments</span>
+            <Comments taskId={task._id} />
           </div>
         </Modal>
       )}

@@ -33,6 +33,32 @@ const projectSchema = new mongoose.Schema(
       required: true,
     },
     members: [memberSchema],
+    tags: {
+      type: [String],
+      default: [],
+    },
+    techStack: {
+      type: [String],
+      default: [],
+    },
+    projectStatus: {
+      type: String,
+      enum: ["Planning", "Active", "On Hold", "Completed"],
+      default: "Active",
+    },
+    visibility: {
+      type: String,
+      enum: ["Public", "Private"],
+      default: "Private",
+    },
+    deadline: {
+      type: Date,
+      default: null,
+    },
+    coverImage: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

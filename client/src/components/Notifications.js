@@ -18,7 +18,6 @@ function Notifications({ showNotifications, setShowNotifications }) {
     try {
       const response = await MarkNotificationAsRead();
       if (response.success) {
-        console.log(response.data);
         dispatch(SetNotifications(response.data));
       }
     } catch (error) {

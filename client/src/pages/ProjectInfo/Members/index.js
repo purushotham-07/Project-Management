@@ -6,13 +6,16 @@ import { SetLoading } from "../../../redux/loadersSlice";
 import MemberForm from "./MemberForm";
 import "./Members.css";
 
-function Members({ project, reloadData }) {
+function Members({ project, reloadData, currentUserRole }) {
   const [role, setRole] = React.useState("");
   const [showMemberForm, setShowMemberForm] = React.useState(false);
   const { user } = useSelector((state) => state.users);
 
   const dispatch = useDispatch();
   const isOwner = project.owner._id === user._id;
+  // Owner and Admin can manage members
+  const canManageMembers = isOwner || currentUserRole === "admin";
+
   const deleteMember = async (memberId) => {
     try {
       dispatch(SetLoading(true));
@@ -65,14 +68,15 @@ function Members({ project, reloadData }) {
     },
   ];
 
-  if (!isOwner) {
+  // Only show action column for users who can manage members
+  if (!canManageMembers) {
     columns.pop();
   }
 
   return (
     <div className="members-container">
       <div className="flex justify-end">
-        {isOwner && (
+        {canManageMembers && (
           <Button
             type="default"
             onClick={() => setShowMemberForm(true)}

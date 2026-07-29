@@ -96,8 +96,14 @@ function ProtectedPage({ children }) {
               />
             </Badge>
 
+            <span
+              className="text-primary cursor-pointer underline mr-5"
+              onClick={() => navigate("/discover")}
+            >
+              Discover
+            </span>
             <i
-              className="ri-logout-box-r-line ml-10 text-primary"
+              className="ri-logout-box-r-line ml-5 text-primary"
               onClick={() => {
                 localStorage.removeItem("token");
                 navigate("/login");

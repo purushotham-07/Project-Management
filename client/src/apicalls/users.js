@@ -1,4 +1,4 @@
-const { apiRequest } = require(".");
+import { apiRequest } from ".";
 
 export const RegisterUser = async (payload) => apiRequest('post', '/api/users/register', payload);
 export const LoginUser = async (payload) => apiRequest('post', '/api/users/login', payload);

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { GetProjectById } from "../../apicalls/projects";
-import { GetAllTasks } from "../../apicalls/tasks";
 import Divider from "../../components/Divider";
 import { SetLoading } from "../../redux/loadersSlice";
 import { getDateFormat } from "../../utils/helpers";
@@ -17,6 +16,7 @@ function ProjectInfo() {
   const [project, setProject] = useState(null);
   const dispatch = useDispatch();
   const params = useParams();
+
   const getData = async () => {
     try {
       dispatch(SetLoading(true));
@@ -24,10 +24,15 @@ function ProjectInfo() {
       dispatch(SetLoading(false));
       if (response.success) {
         setProject(response.data);
-        const currentUser = response.data.members.find(
-          (member) => member.user._id === user._id
-        );
-        setCurrentUserRole(currentUser.role);
+        // Determine current user's role
+        if (response.data.owner._id === user._id) {
+          setCurrentUserRole("owner");
+        } else {
+          const currentUser = response.data.members.find(
+            (member) => member.user._id === user._id
+          );
+          setCurrentUserRole(currentUser ? currentUser.role : "");
+        }
       } else {
         throw new Error(response.message);
       }
@@ -52,11 +57,31 @@ function ProjectInfo() {
             <span className="text-gray-600 text-sm">
               {project?.description}
             </span>
-            <div className="flex gap-5">
+            <div className="flex gap-5 mt-2">
               <span className="text-gray-600 text-sm font-semibold">Role</span>
               <span className="text-gray-600 text-sm uppercase">
                 {currentUserRole}
               </span>
+              {project.visibility && (
+                <>
+                  <span className="text-gray-600 text-sm font-semibold ml-5">
+                    Visibility
+                  </span>
+                  <span className="text-gray-600 text-sm uppercase">
+                    {project.visibility}
+                  </span>
+                </>
+              )}
+              {project.projectStatus && (
+                <>
+                  <span className="text-gray-600 text-sm font-semibold ml-5">
+                    Status
+                  </span>
+                  <span className="text-gray-600 text-sm uppercase">
+                    {project.projectStatus}
+                  </span>
+                </>
+              )}
             </div>
           </div>
           <div>
@@ -83,10 +108,10 @@ function ProjectInfo() {
 
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane tab="Tasks" key="1">
-            <Tasks project={project} />
+            <Tasks project={project} currentUserRole={currentUserRole} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Members" key="2">
-            <Members project={project} reloadData={getData} />
+            <Members project={project} reloadData={getData} currentUserRole={currentUserRole} />
           </Tabs.TabPane>
         </Tabs>
       </div>

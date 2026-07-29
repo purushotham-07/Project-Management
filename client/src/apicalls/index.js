@@ -12,6 +12,6 @@ export const apiRequest = async (method, url, payload) => {
     });
     return response.data;
   } catch (error) {
-    return error;
+    return error.response ? error.response.data : { success: false, message: error.message };
   }
 };

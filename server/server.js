@@ -9,11 +9,18 @@ const usersRoute = require("./routes/usersRoute");
 const projectsRoute = require("./routes/projectsRoute");
 const tasksRoute = require("./routes/tasksRoute");
 const notificationsRoute = require("./routes/notificationsRoute");
+const commentsRoute = require("./routes/commentsRoute");
+const activityLogRoute = require("./routes/activityLogRoute");
+const joinRequestRoute = require("./routes/joinRequestRoute");
 
 app.use("/api/users", usersRoute);
 app.use("/api/projects", projectsRoute);
 app.use("/api/tasks", tasksRoute);
 app.use("/api/notifications", notificationsRoute);
+app.use("/api/comments", commentsRoute);
+app.use("/api/activity-logs", activityLogRoute);
+app.use("/api/join-requests", joinRequestRoute);
+
 
 const path = require("path");
 __dirname = path.resolve();

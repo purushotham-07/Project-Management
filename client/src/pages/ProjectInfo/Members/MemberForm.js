@@ -11,7 +11,6 @@ function MemberForm({
   reloadData,
   project,
 }) {
-  console.log(project.members);
   const formRef = React.useRef(null);
   const dispatch = useDispatch();
   const onFinish = async (values) => {

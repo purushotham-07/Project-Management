@@ -1,4 +1,4 @@
-const { apiRequest } = require(".");
+import { apiRequest } from ".";
 
 export const CreateProject = async (project) => apiRequest("post", "/api/projects/create-project", project);
 
@@ -15,3 +15,7 @@ export const GetProjectsByRole = async (userId) => apiRequest("post", "/api/proj
 export const AddMemberToProject = async (data) => apiRequest("post", "/api/projects/add-member", data);
 
 export const RemoveMemberFromProject = async (data) => apiRequest("post", "/api/projects/remove-member", data);
+
+export const GetPublicProjects = async (filters) => apiRequest("post", "/api/projects/get-public-projects", filters);
+
+export const GetProjectsByRolePaginated = async (data) => apiRequest("post", "/api/projects/get-projects-by-role-paginated", data);
