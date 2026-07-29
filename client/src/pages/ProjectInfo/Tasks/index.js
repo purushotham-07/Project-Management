@@ -1,4 +1,4 @@
-import { Button, message, Modal, Table, Tag, Tabs } from "antd";
+import { Button, message, Modal, Table, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteTask, GetAllTasks, UpdateTask } from "../../../apicalls/tasks";
@@ -91,6 +91,7 @@ function Tasks({ project, currentUserRole }) {
 
   React.useEffect(() => {
     getTasks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const priorityColorMap = {
@@ -205,6 +206,7 @@ function Tasks({ project, currentUserRole }) {
 
   useEffect(() => {
     getTasks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const [viewMode, setViewMode] = useState("table");
