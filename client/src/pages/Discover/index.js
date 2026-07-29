@@ -16,8 +16,6 @@ function Discover() {
   const [statusFilter, setStatusFilter] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.users);
-
   const getData = async () => {
     try {
       dispatch(SetLoading(true));
@@ -59,6 +57,7 @@ function Discover() {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const handleSearch = () => {

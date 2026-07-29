@@ -21,10 +21,10 @@
   padding: 10px;
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
+}
 
-  &:hover {
-    transform: scale(1.05);
-  }
+.home-project-card:hover {
+  transform: scale(1.05);
 }
 
 .home-project-name {

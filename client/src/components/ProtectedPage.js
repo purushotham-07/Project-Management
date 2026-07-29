@@ -6,7 +6,7 @@ import { GetLoggedInUser } from "../apicalls/users";
 import { SetNotifications, SetUser } from "../redux/usersSlice";
 import { SetLoading } from "../redux/loadersSlice";
 import { GetAllNotifications } from "../apicalls/notifications";
-import { Avatar, Badge, Space } from "antd";
+import { Avatar, Badge } from "antd";
 import Notifications from "./Notifications";
 
 function ProtectedPage({ children }) {
@@ -54,12 +54,14 @@ function ProtectedPage({ children }) {
     } else {
       navigate("/login");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (user) {
       getNotifications();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (

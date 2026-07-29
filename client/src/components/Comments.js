@@ -9,8 +9,6 @@ function Comments({ taskId }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.users);
-
   const fetchComments = async () => {
     try {
       dispatch(SetLoading(true));
@@ -48,6 +46,7 @@ function Comments({ taskId }) {
 
   useEffect(() => {
     if (taskId) fetchComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskId]);
 
   return (

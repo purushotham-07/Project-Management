@@ -45,6 +45,7 @@ function Notifications({ showNotifications, setShowNotifications }) {
     if (notifications.length > 0) {
       readNotifications();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notifications]);
 
   return (
