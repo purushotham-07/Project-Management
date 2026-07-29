@@ -2,6 +2,20 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 app.use(express.json());
+
+// CORS configuration - allow frontend from any origin
+const cors = require("cors");
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://client-m6wys6jz3-purushothams-projects-e1f68dff.vercel.app",
+    "https://client-29u2xgaya-purushothams-projects-e1f68dff.vercel.app",
+    "https://client-purushothams-projects-e1f68dff.vercel.app",
+    "https://client-purushotham-07-purushothams-projects-e1f68dff.vercel.app",
+  ],
+  credentials: true,
+}));
+
 const dbConfig = require("./config/dbConfig");
 const port = process.env.PORT || 5000;
 
