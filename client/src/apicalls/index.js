@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const apiBaseUrl = process.env.REACT_APP_API_URL || "";
+// For Vercel deployment, default to Render backend
+// In development, the proxy (package.json) handles it
+const apiBaseUrl = process.env.REACT_APP_API_URL || "https://project-management-321v.onrender.com";
 
 export const apiRequest = async (method, url, payload) => {
   try {
