@@ -3,21 +3,14 @@ const app = express();
 require("dotenv").config();
 app.use(express.json());
 
-// CORS configuration - allow frontend from any origin
+// CORS configuration - allow Vercel frontend and localhost
 const cors = require("cors");
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://project-management-321v.onrender.com",
-  "https://client-six-beige-64.vercel.app",
-  "https://client-purushothams-projects-e1f68dff.vercel.app",
-  "https://client-purushotham-07-purushothams-projects-e1f68dff.vercel.app",
-];
-// Add any Vercel deployment URLs dynamically
-if (process.env.CORS_ORIGINS) {
-  process.env.CORS_ORIGINS.split(",").forEach(origin => allowedOrigins.push(origin.trim()));
-}
 app.use(cors({
-  origin: allowedOrigins,
+  origin: [
+    "http://localhost:3000",
+    "https://client-six-beige-64.vercel.app",
+    /\.vercel\.app$/,
+  ],
   credentials: true,
 }));
 
