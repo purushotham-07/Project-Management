@@ -1,5 +1,11 @@
 {
-  "dependencies": {
-    "express-validator": "^7.3.2"
+  "name": "project-management",
+  "version": "1.0.0",
+  "description": "Project Management Application",
+  "scripts": {
+    "install": "cd server && npm install",
+    "build": "cd client && npm install && npm run build",
+    "start": "cd server && node server.js",
+    "dev": "cd server && nodemon server.js"
   }
 }
