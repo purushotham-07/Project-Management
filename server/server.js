@@ -1,11 +1,12 @@
 const express = require("express");
-const app = express();
+const cors = require("cors");
 require("dotenv").config();
+
+const app = express();
+
 app.use(express.json());
 
-// CORS configuration - allow Vercel frontend and localhost
-const cors = require("cors");
-
+// CORS configuration
 const allowedOrigins = [
   "http://localhost:3000",
   "https://client-six-beige-64.vercel.app",
@@ -14,7 +15,6 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no Origin (Postman, server-to-server)
       if (!origin) return callback(null, true);
 
       if (
@@ -30,33 +30,36 @@ app.use(
   })
 );
 
-const dbConfig = require("./config/dbConfig");
-const port = process.env.PORT || 5000;
+// Database connection
+require("./config/dbConfig");
 
-const usersRoute = require("./routes/usersRoute");
-const projectsRoute = require("./routes/projectsRoute");
-const tasksRoute = require("./routes/tasksRoute");
-const notificationsRoute = require("./routes/notificationsRoute");
-const commentsRoute = require("./routes/commentsRoute");
-const activityLogRoute = require("./routes/activityLogRoute");
-const joinRequestRoute = require("./routes/joinRequestRoute");
+// Routes
+app.use("/api/users", require("./routes/usersRoute"));
+app.use("/api/projects", require("./routes/projectsRoute"));
+app.use("/api/tasks", require("./routes/tasksRoute"));
+app.use("/api/notifications", require("./routes/notificationsRoute"));
+app.use("/api/comments", require("./routes/commentsRoute"));
+app.use("/api/activity-logs", require("./routes/activityLogRoute"));
+app.use("/api/join-requests", require("./routes/joinRequestRoute"));
 
-app.use("/api/users", usersRoute);
-app.use("/api/projects", projectsRoute);
-app.use("/api/tasks", tasksRoute);
-app.use("/api/notifications", notificationsRoute);
-app.use("/api/comments", commentsRoute);
-app.use("/api/activity-logs", activityLogRoute);
-app.use("/api/join-requests", joinRequestRoute);
-
-
-const path = require("path");
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "..", "client", "build")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
+// Health check
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Project Management API is running 🚀",
   });
-}
+});
 
-app.listen(port, () => console.log(`Node JS server listening on port ${port}`));
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found",
+  });
+});
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Node JS server listening on port ${PORT}`);
+});
