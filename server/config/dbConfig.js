@@ -1,19 +1,28 @@
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 const mongoose = require("mongoose");
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  console.error("MONGO_URI is not defined in environment variables");
+  process.exit(1);
+}
+
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    console.log("Mongo db connected successfully");
+  })
+  .catch((err) => {
+    console.error("Mongo db connection error: ", err);
+    process.exit(1);
+  });
 
 const connection = mongoose.connection;
 
-connection.on("connected", () => {
-  console.log("Mongo db connected successfully");
-});
-
-connection.on("error", (err) => {
-  console.log("Mongo db connection error: ", err);
+connection.on("disconnected", () => {
+  console.log("Mongo db disconnected");
 });
 
 module.exports = mongoose;

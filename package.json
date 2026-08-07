@@ -4,8 +4,10 @@
   "description": "Project Management Application",
   "scripts": {
     "install": "cd server && npm install",
-    "build": "cd client && npm install && npm run build",
     "start": "cd server && node server.js",
     "dev": "cd server && nodemon server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

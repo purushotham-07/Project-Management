@@ -125,11 +125,8 @@ router.post("/delete-task", authMiddleware, async (req, res) => {
   }
 });
 
-const storage = multer.diskStorage({
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + file.originalname);
-  },
-});
+// Use memory storage for Render deployment (ephemeral filesystem)
+const storage = multer.memoryStorage();
 
 router.post(
   "/upload-image",
@@ -144,10 +141,25 @@ router.post(
         });
       }
 
+      // Upload buffer directly to Cloudinary
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: "project-management",
+            resource_type: "auto",
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(req.file.buffer);
+      });
+
       return res.status(200).send({
         success: true,
         message: "Image uploaded successfully",
-        data: req.file.path,
+        data: result.secure_url,
       });
     } catch (error) {
       console.error("Cloudinary Error:", error);
