@@ -134,7 +134,7 @@ const storage = multer.diskStorage({
 router.post(
   "/upload-image",
   authMiddleware,
-  multer({ storage: storage }).single("file"),
+  multer({ storage }).single("file"),
   async (req, res) => {
     try {
       if (!req.file) {
@@ -143,34 +143,21 @@ router.post(
           message: "No file uploaded",
         });
       }
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "tasks",
-      });
-      const imageURL = result.secure_url;
 
-      await Task.findOneAndUpdate(
-        { _id: req.body.taskId },
-        {
-          $push: {
-            attachments: imageURL,
-          },
-        }
-      );
-
-      res.status(200).send({
+      return res.status(200).send({
         success: true,
         message: "Image uploaded successfully",
-        data: imageURL,
+        data: req.file.path,
       });
     } catch (error) {
-  console.error("Cloudinary Error:", error);
+      console.error("Cloudinary Error:", error);
 
-  res.status(500).json({
-    success: false,
-    message: error.message,
-    stack: error.stack,
-  });
-}
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
 );
 
 module.exports = router;
