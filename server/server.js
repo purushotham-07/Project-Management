@@ -5,14 +5,30 @@ app.use(express.json());
 
 // CORS configuration - allow Vercel frontend and localhost
 const cors = require("cors");
-app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://client-six-beige-64.vercel.app",
-    /\.vercel\.app$/,
-  ],
-  credentials: true,
-}));
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://client-six-beige-64.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no Origin (Postman, server-to-server)
+      if (!origin) return callback(null, true);
+
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".vercel.app")
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked: ${origin}`));
+    },
+    credentials: true,
+  })
+);
 
 const dbConfig = require("./config/dbConfig");
 const port = process.env.PORT || 5000;
