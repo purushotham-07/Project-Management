@@ -1,6 +1,6 @@
 import { Button, Input, message } from "antd";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AddComment, GetComments } from "../apicalls/comments";
 import { SetLoading } from "../redux/loadersSlice";
 import { getDateFormat } from "../utils/helpers";

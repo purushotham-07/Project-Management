@@ -4,9 +4,8 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": { 
-        "distDir": "build",
-        "buildCommand": "CI=false react-scripts build"
+      "config": {
+        "distDir": "build"
       }
     }
   ],

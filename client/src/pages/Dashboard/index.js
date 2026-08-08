@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { message, Card, Progress, Tag } from "antd";
+import { message, Progress, Tag } from "antd";
 import {
   PieChart,
   Pie,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { message, Modal, Tag, Button } from "antd";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
