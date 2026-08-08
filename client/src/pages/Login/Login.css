@@ -66,6 +66,7 @@
   .bg-primary {
     padding: 40px 20px;
     min-height: auto;
+    height: auto !important;
   }
 
   .bg-primary > div {
@@ -80,6 +81,8 @@
     padding: 20px;
     display: flex;
     justify-content: center;
+    min-height: auto;
+    height: auto !important;
   }
 
   .login-form {

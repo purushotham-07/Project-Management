@@ -107,7 +107,7 @@ function Projects() {
           Add Project
         </Button>
       </div>
-      <Table columns={columns} dataSource={projects} className="projects-table" />
+      <Table columns={columns} dataSource={projects} className="projects-table" scroll={{ x: true }} />
       {show && (
         <ProjectForm
           show={show}

@@ -26,6 +26,7 @@
   .bg-primary-gradient {
     padding: 40px 20px;
     min-height: auto;
+    height: auto !important;
   }
 
   .bg-primary-gradient > div {
@@ -38,6 +39,8 @@
 
   .register-container > div:last-child {
     padding: 20px;
+    min-height: auto;
+    height: auto !important;
   }
 
   .register-container > div:last-child > div {

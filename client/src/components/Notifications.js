@@ -55,7 +55,7 @@ function Notifications({ showNotifications, setShowNotifications }) {
       onCancel={() => setShowNotifications(false)}
       centered
       footer={null}
-      width={1000}
+      width={window.innerWidth < 768 ? "95%" : 1000}
     >
       <div className="flex flex-col gap-5 mt-5">
         {notifications.length > 0 ? (
@@ -76,14 +76,14 @@ function Notifications({ showNotifications, setShowNotifications }) {
       }
         {notifications.map((notification) => (
           <div
-            className="flex justify-between items-end border border-solid p-2 roudned cursor-pointer"
+            className="flex justify-between items-end gap-2 flex-wrap border border-solid p-2 roudned cursor-pointer"
             onClick={() => {
               setShowNotifications(false);
               navigate(notification.onClick);
             }}
           >
             <div className="flex flex-col">
-              <span className="text-md font-semibold  text-gray-700">
+              <span className="text-md font-semibold text-gray-700">
                 {notification.title}
               </span>
               <span className="text-sm">{notification.description}</span>

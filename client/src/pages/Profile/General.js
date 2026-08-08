@@ -43,7 +43,7 @@ function General() {
   };
 
   return (
-    <div className="max-w-[600px]">
+    <div className="w-full max-w-[600px] px-2 md:px-0">
       <h1 className="text-xl text-primary font-semibold mb-4">General Settings</h1>
       <Divider />
       <Form layout="vertical" form={form} onFinish={onFinish}>

@@ -41,14 +41,14 @@ function Register() {
     <div className="register-container">
       <div className="bg-primary-gradient h-screen flex flex-col justify-center items-center">
         <div>
-          <h1 className="text-7xl text-white">Project Management</h1>
+          <h1 className="text-4xl md:text-7xl text-white">Project Management</h1>
           <span className="text-white mt-5">
             Please register your account to use our services.
           </span>
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <div className="w-[420px]">
+        <div className="w-full max-w-[420px] px-5">
           <h1 className="text-2xl text-gray-700 uppercase">
             Let's get you started
           </h1>

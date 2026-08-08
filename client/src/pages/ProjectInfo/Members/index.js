@@ -111,6 +111,7 @@ function Members({ project, reloadData, currentUserRole }) {
           }
         })}
         className="members-table"
+        scroll={{ x: true }}
       />
 
       {showMemberForm && (

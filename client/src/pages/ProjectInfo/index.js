@@ -51,7 +51,7 @@ function ProjectInfo() {
   return (
     project && (
       <div>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center flex-wrap gap-4">
           <div>
             <h1 className="text-primary text-2xl font-semibold uppercase">
               {project?.name}
@@ -59,7 +59,7 @@ function ProjectInfo() {
             <span className="text-gray-600 text-sm">
               {project?.description}
             </span>
-            <div className="flex gap-5 mt-2">
+            <div className="flex gap-5 mt-2 flex-wrap">
               <span className="text-gray-600 text-sm font-semibold">Role</span>
               <span className="text-gray-600 text-sm uppercase">
                 {currentUserRole}

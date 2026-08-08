@@ -6,11 +6,12 @@ import { GetLoggedInUser } from "../apicalls/users";
 import { SetNotifications, SetUser } from "../redux/usersSlice";
 import { SetLoading } from "../redux/loadersSlice";
 import { GetAllNotifications } from "../apicalls/notifications";
-import { Avatar, Badge, Dropdown, Menu } from "antd";
+import { Avatar, Badge, Dropdown, Menu, Drawer } from "antd";
 import Notifications from "./Notifications";
 
 function ProtectedPage({ children }) {
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
@@ -117,6 +118,16 @@ function ProtectedPage({ children }) {
     />
   );
 
+  const mobileMenuItems = [
+    { key: "home", label: "Home", onClick: () => { setShowMobileMenu(false); navigate("/"); } },
+    { key: "dashboard", label: "Dashboard", onClick: () => { setShowMobileMenu(false); navigate("/dashboard"); } },
+    { key: "calendar", label: "Calendar", onClick: () => { setShowMobileMenu(false); navigate("/calendar"); } },
+    { key: "discover", label: "Discover", onClick: () => { setShowMobileMenu(false); navigate("/discover"); } },
+    { key: "profile", label: "Profile", onClick: () => { setShowMobileMenu(false); navigate("/profile"); } },
+    { type: "divider" },
+    { key: "logout", label: "Logout", danger: true, onClick: () => { localStorage.removeItem("token"); navigate("/login"); } },
+  ];
+
   return (
     user && (
       <div>
@@ -181,9 +192,27 @@ function ProtectedPage({ children }) {
                 {user?.firstName}
               </span>
             </Dropdown>
+
+            <i
+              className="ri-menu-line header-toggle-icon md:hidden cursor-pointer"
+              onClick={() => setShowMobileMenu(true)}
+            ></i>
           </div>
         </div>
         <div className="px-5 py-3 app-content">{children}</div>
+
+        <Drawer
+          title="Menu"
+          placement="right"
+          open={showMobileMenu}
+          onClose={() => setShowMobileMenu(false)}
+          width={280}
+        >
+          <Menu
+            items={mobileMenuItems}
+            onClick={() => setShowMobileMenu(false)}
+          />
+        </Drawer>
 
         {showNotifications && (
           <Notifications

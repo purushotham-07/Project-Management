@@ -27,4 +27,11 @@
   }
   
   /* You can customize the styles further based on your design preferences */
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .projects-container {
+      padding: 12px;
+    }
+  }
   

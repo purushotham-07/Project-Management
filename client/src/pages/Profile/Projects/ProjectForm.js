@@ -55,7 +55,7 @@ function ProjectForm({ show, setShow, reloadData, project }) {
       open={show}
       onCancel={() => setShow(false)}
       centered
-      width={700}
+      width={window.innerWidth < 768 ? "95%" : 700}
       onOk={() => {
         formRef.current.submit();
       }}
@@ -94,7 +94,7 @@ function ProjectForm({ show, setShow, reloadData, project }) {
           />
         </Form.Item>
 
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Form.Item label="Project Status" name="projectStatus">
             <Select>
               <Select.Option value="Planning">Planning</Select.Option>
@@ -112,7 +112,7 @@ function ProjectForm({ show, setShow, reloadData, project }) {
           </Form.Item>
         </div>
 
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Form.Item label="Tags (comma separated)" name="tags">
             <Select
               mode="tags"
@@ -130,7 +130,7 @@ function ProjectForm({ show, setShow, reloadData, project }) {
           </Form.Item>
         </div>
 
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Form.Item label="Deadline" name="deadline">
             <DatePicker
               className="w-full"

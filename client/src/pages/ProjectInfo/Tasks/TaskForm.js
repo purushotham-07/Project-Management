@@ -136,7 +136,7 @@ function TaskForm({
         formRef.current.submit();
       }}
       okText={task ? "UPDATE" : "CREATE"}
-      width={800}
+      width={window.innerWidth < 768 ? "95%" : 800}
       {...(selectedTab === "2" && { footer: null })}
     >
       <Tabs activeKey={selectedTab} onChange={(key) => setSelectedTab(key)}>
@@ -158,7 +158,7 @@ function TaskForm({
               <TextArea />
             </Form.Item>
 
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <Form.Item label="Priority" name="priority">
                 <Select>
                   <Select.Option value="Low">Low</Select.Option>
@@ -191,7 +191,7 @@ function TaskForm({
           </Form>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Attachments" key="2" disabled={!task}>
-          <div className="flex gap-5 mb-5">
+          <div className="flex gap-5 mb-5 flex-wrap">
             {images.map((image) => {
               return (
                 <div className="flex gap-3 p-2 border border-solid rounded border-gray-500 items-end">

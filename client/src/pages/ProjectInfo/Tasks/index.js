@@ -302,7 +302,7 @@ function Tasks({ project, currentUserRole }) {
       </div>
 
       {viewMode === "table" ? (
-        <Table columns={columns} dataSource={tasks} className="mt-5" rowKey="_id" />
+        <Table columns={columns} dataSource={tasks} className="mt-5" rowKey="_id" scroll={{ x: true }} />
       ) : (
         <Kanban
           tasks={tasks}
@@ -329,7 +329,7 @@ function Tasks({ project, currentUserRole }) {
           onCancel={() => setShowViewTask(false)}
           centered
           footer={null}
-          width={700}
+          width={window.innerWidth < 768 ? "95%" : 700}
         >
           <Divider />
           <div className="flex flex-col">
@@ -354,7 +354,7 @@ function Tasks({ project, currentUserRole }) {
               </div>
             )}
 
-            <div className="flex gap-5 mt-2">
+            <div className="flex gap-5 mt-2 flex-wrap">
               {task.attachments.map((image, index) => {
                 return (
                   <img

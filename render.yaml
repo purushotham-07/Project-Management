@@ -2,6 +2,7 @@ services:
   - type: web
     name: project-management-api
     runtime: node
+    runtimeVersion: "20.18.0"
     rootDir: server
     buildCommand: npm install
     startCommand: npm start

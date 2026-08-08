@@ -40,14 +40,14 @@ function Login() {
     <div className="login-container">
       <div className="bg-primary h-screen flex flex-col justify-center items-center">
         <div>
-          <h1 className="text-7xl text-white">ProjectManager</h1>
+          <h1 className="text-4xl md:text-7xl text-white">ProjectManager</h1>
           <span className="text-white mt-5">
             Manage your projects efficiently and effectively with our powerful
           </span>
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <div className="login-form">
+        <div className="login-form w-full max-w-[420px] px-5">
           <h1 className="login-form-title">LOGIN TO YOUR ACCOUNT</h1>
           <Divider className="login-divider" />
           <Form layout="vertical" onFinish={onFinish}>
