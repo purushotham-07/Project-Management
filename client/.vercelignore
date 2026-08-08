@@ -1,0 +1,15 @@
+node_modules
+.git
+*.md
+Dockerfile
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+src/**/*.test.js
+src/**/*.test.jsx
+src/**/*.spec.js
+src/**/*.spec.jsx
+README.md
+coverage
