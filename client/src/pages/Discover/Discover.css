@@ -1,5 +1,7 @@
 .discover-container {
   padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .discover-header {
@@ -7,6 +9,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .discover-filters {
@@ -35,11 +39,15 @@
   border-radius: 8px;
   padding: 16px;
   cursor: pointer;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.16s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.16s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+  background: #fff;
 }
 
 .discover-card:hover {
   transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .discover-card-title {
@@ -83,4 +91,66 @@
   justify-content: center;
   gap: 8px;
   margin-top: 24px;
+}
+
+/* Dark mode */
+.dark-mode .discover-card {
+  background: #1f1f1f;
+  border-color: #303030;
+}
+
+.dark-mode .discover-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* 60fps motion: optimized transitions for animations */
+@media (prefers-reduced-motion: no-preference) {
+  .discover-card {
+    will-change: transform, box-shadow;
+  }
+}
+
+.dark-mode .discover-card-desc {
+  color: #a0a0a0;
+}
+
+.dark-mode .discover-card-tag {
+  background: #1a3350;
+  color: #1890ff;
+}
+
+.dark-mode .discover-card-footer {
+  color: #8c8c8c;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .discover-container {
+    padding: 12px;
+  }
+
+  .discover-filters {
+    flex-direction: column;
+  }
+
+  .discover-filters input,
+  .discover-filters select {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .discover-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .discover-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .discover-card {
+    padding: 12px;
+  }
 }

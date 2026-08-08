@@ -2,7 +2,9 @@ const router = require("express").Router();
 const { body, validationResult } = require("express-validator");
 const JoinRequest = require("../models/joinRequestModel");
 const Project = require("../models/projectModel");
+const User = require("../models/userModel");
 const authMiddleware = require("../middlewares/authMiddleware");
+const { sendEmail } = require("../config/emailConfig");
 
 // Request to join a public project
 router.post(
@@ -21,7 +23,7 @@ router.post(
         });
       }
 
-      const project = await Project.findById(req.body.projectId);
+      const project = await Project.findById(req.body.projectId).populate("owner");
       if (!project) {
         return res.status(404).send({
           success: false,
@@ -68,7 +70,28 @@ router.post(
       await joinRequest.save();
 
       const populated = await JoinRequest.findById(joinRequest._id)
-        .populate("user", "firstName lastName email");
+        .populate("user", "firstName lastName email linkedin github");
+
+      // Send email notification to project owner
+      const requestingUser = populated.user;
+      await sendEmail({
+        to: project.owner.email,
+        subject: `New Join Request for ${project.name}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
+            <h2 style="color: #333; margin-bottom: 20px;">New Join Request</h2>
+            <p style="color: #555; font-size: 14px;">A user has requested to join your project <strong>${project.name}</strong>.</p>
+            <div style="background: #f5f5f5; padding: 15px; border-radius: 6px; margin: 15px 0;">
+              <p><strong>Name:</strong> ${requestingUser.firstName} ${requestingUser.lastName}</p>
+              <p><strong>Email:</strong> ${requestingUser.email}</p>
+              ${requestingUser.linkedin ? `<p><strong>LinkedIn:</strong> <a href="${requestingUser.linkedin}">${requestingUser.linkedin}</a></p>` : ""}
+              ${requestingUser.github ? `<p><strong>GitHub:</strong> <a href="${requestingUser.github}">${requestingUser.github}</a></p>` : ""}
+              ${populated.message ? `<p><strong>Message:</strong> ${populated.message}</p>` : ""}
+            </div>
+            <p style="color: #777; font-size: 13px;">Please review this request in your project management dashboard.</p>
+          </div>
+        `,
+      });
 
       res.status(201).send({
         success: true,
@@ -118,7 +141,7 @@ router.post("/get-join-requests", authMiddleware, async (req, res) => {
     }
 
     const requests = await JoinRequest.find({ project: req.body.projectId })
-      .populate("user", "firstName lastName email")
+      .populate("user", "firstName lastName email linkedin github")
       .sort({ createdAt: -1 });
 
     res.status(200).send({
@@ -144,7 +167,9 @@ router.post("/respond-to-request", authMiddleware, async (req, res) => {
       });
     }
 
-    const joinRequest = await JoinRequest.findById(requestId).populate("project");
+    const joinRequest = await JoinRequest.findById(requestId)
+      .populate("project")
+      .populate("user", "firstName lastName email");
     if (!joinRequest) {
       return res.status(404).send({
         success: false,
@@ -178,12 +203,25 @@ router.post("/respond-to-request", authMiddleware, async (req, res) => {
       await Project.findByIdAndUpdate(project._id, {
         $push: {
           members: {
-            user: joinRequest.user,
+            user: joinRequest.user._id,
             role: "employee",
           },
         },
       });
     }
+
+    // Send email notification to the requesting user
+    await sendEmail({
+      to: joinRequest.user.email,
+      subject: `Join Request ${status === "approved" ? "Approved" : "Rejected"} - ${project.name}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
+          <h2 style="color: #333; margin-bottom: 20px;">Join Request ${status === "approved" ? "Approved ✅" : "Rejected ❌"}</h2>
+          <p style="color: #555; font-size: 14px;">Your request to join the project <strong>${project.name}</strong> has been <strong>${status}</strong>.</p>
+          ${status === "approved" ? `<p style="color: #555; font-size: 14px;">You are now a member of this project. You can start collaborating with the team!</p>` : `<p style="color: #555; font-size: 14px;">If you have any questions, please contact the project owner.</p>`}
+        </div>
+      `,
+    });
 
     res.status(200).send({
       success: true,

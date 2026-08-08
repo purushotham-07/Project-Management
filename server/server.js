@@ -45,6 +45,7 @@ app.use("/api/notifications", require("./routes/notificationsRoute"));
 app.use("/api/comments", require("./routes/commentsRoute"));
 app.use("/api/activity-logs", require("./routes/activityLogRoute"));
 app.use("/api/join-requests", require("./routes/joinRequestRoute"));
+app.use("/api/analytics", require("./routes/analyticsRoute"));
 
 // Health check
 app.get("/", (req, res) => {

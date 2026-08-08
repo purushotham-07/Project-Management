@@ -8,6 +8,7 @@ import { SetLoading } from "../../redux/loadersSlice";
 import { getDateFormat } from "../../utils/helpers";
 import Members from "./Members";
 import Tasks from "./Tasks";
+import JoinRequests from "./Members/JoinRequests";
 import "./ProjectInfo.css";
 
 function ProjectInfo() {
@@ -114,6 +115,11 @@ function ProjectInfo() {
           <Tabs.TabPane tab="Members" key="2">
             <Members project={project} reloadData={getData} currentUserRole={currentUserRole} />
           </Tabs.TabPane>
+          {(currentUserRole === "owner" || currentUserRole === "admin") && (
+            <Tabs.TabPane tab="Join Requests" key="3">
+              <JoinRequests project={project} />
+            </Tabs.TabPane>
+          )}
         </Tabs>
       </div>
     )

@@ -78,6 +78,30 @@ function Register() {
             >
               <Input type="password" />
             </Form.Item>
+            <Form.Item
+              label="LinkedIn Profile URL"
+              name="linkedin"
+              rules={[
+                {
+                  type: "url",
+                  message: "Please enter a valid LinkedIn URL",
+                },
+              ]}
+            >
+              <Input placeholder="https://www.linkedin.com/in/your-profile" />
+            </Form.Item>
+            <Form.Item
+              label="GitHub Profile URL"
+              name="github"
+              rules={[
+                {
+                  type: "url",
+                  message: "Please enter a valid GitHub URL",
+                },
+              ]}
+            >
+              <Input placeholder="https://github.com/your-username" />
+            </Form.Item>
 
             <Button
               type="primary"

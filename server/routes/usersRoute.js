@@ -14,6 +14,14 @@ router.post(
     body("password")
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters"),
+    body("linkedin")
+      .optional()
+      .isURL()
+      .withMessage("LinkedIn must be a valid URL"),
+    body("github")
+      .optional()
+      .isURL()
+      .withMessage("GitHub must be a valid URL"),
   ],
   async (req, res) => {
     try {
@@ -122,6 +130,39 @@ router.get("/get-logged-in-user", authMiddleware, async (req, res) => {
       success: true,
       data: user,
       message: "User fetched successfully",
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+// Update user profile (linkedin, github, firstName, lastName)
+router.post("/update-profile", authMiddleware, async (req, res) => {
+  try {
+    const { firstName, lastName, linkedin, github } = req.body;
+    const user = await User.findById(req.body.userId);
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (linkedin !== undefined) user.linkedin = linkedin;
+    if (github !== undefined) user.github = github;
+
+    await user.save();
+    user.password = undefined;
+
+    res.status(200).send({
+      success: true,
+      data: user,
+      message: "Profile updated successfully",
     });
   } catch (error) {
     res.status(500).send({

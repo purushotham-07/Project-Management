@@ -20,6 +20,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    linkedin: {
+      type: String,
+      default: "",
+    },
+    github: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

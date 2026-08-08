@@ -97,3 +97,32 @@
 .tabs-container {
   margin-top: 20px;
 }
+
+/* Dark mode overrides */
+.dark-mode .project-description {
+  color: #a0a0a0;
+}
+
+.dark-mode .metadata-label {
+  color: #a0a0a0;
+}
+
+.dark-mode .divider {
+  border-bottom-color: #303030;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 12px;
+  }
+
+  .project-details {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .project-name {
+    font-size: 20px;
+  }
+}

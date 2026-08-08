@@ -8,6 +8,8 @@ import Profile from "./pages/Profile";
 import ProjectInfo from "./pages/ProjectInfo";
 import Register from "./pages/Register";
 import Discover from "./pages/Discover";
+import Dashboard from "./pages/Dashboard";
+import CalendarPage from "./pages/Calendar";
 
 function App() {
   const { loading } = useSelector((state) => state.loaders);
@@ -21,6 +23,22 @@ function App() {
             element={
               <ProtectedPage>
                 <Home />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedPage>
+                <Dashboard />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              <ProtectedPage>
+                <CalendarPage />
               </ProtectedPage>
             }
           />

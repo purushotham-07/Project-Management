@@ -7,6 +7,7 @@ const User = require("../models/userModel");
 const authMiddleware = require("../middlewares/authMiddleware");
 const cloudinary = require("../config/cloudinaryConfig");
 const multer = require("multer");
+const { sendEmail } = require("../config/emailConfig");
 
 router.post(
   "/create-task",
@@ -29,6 +30,30 @@ router.post(
 
       const newTask = new Task(req.body);
       await newTask.save();
+
+      // Send email notification to assigned user
+      const assignedUser = await User.findById(req.body.assignedTo);
+      const project = await Project.findById(req.body.project);
+      if (assignedUser && project) {
+        await sendEmail({
+          to: assignedUser.email,
+          subject: `New Task Assigned: ${req.body.name}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
+              <h2 style="color: #333; margin-bottom: 20px;">New Task Assigned 📋</h2>
+              <p style="color: #555; font-size: 14px;">You have been assigned a new task in project <strong>${project.name}</strong>.</p>
+              <div style="background: #f5f5f5; padding: 15px; border-radius: 6px; margin: 15px 0;">
+                <p><strong>Task:</strong> ${req.body.name}</p>
+                <p><strong>Description:</strong> ${req.body.description}</p>
+                <p><strong>Priority:</strong> ${req.body.priority || "Medium"}</p>
+                ${req.body.dueDate ? `<p><strong>Due Date:</strong> ${new Date(req.body.dueDate).toLocaleDateString()}</p>` : ""}
+              </div>
+              <p style="color: #777; font-size: 13px;">Please log in to your project management dashboard to view the task details.</p>
+            </div>
+          `,
+        });
+      }
+
       res.status(201).send({
         success: true,
         message: "Task created successfully",

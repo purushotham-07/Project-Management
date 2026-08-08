@@ -1,6 +1,7 @@
 .login-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
 }
 
 .bg-primary {
@@ -41,4 +42,48 @@
 
 .login-link a {
   color: #3498db;
+}
+
+/* Dark mode */
+.dark-mode .login-container {
+  background: #141414;
+}
+
+.dark-mode .login-form-title {
+  color: #e8e8e8;
+}
+
+.dark-mode .login-link span {
+  color: #a0a0a0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-container {
+    grid-template-columns: 1fr;
+  }
+
+  .bg-primary {
+    padding: 40px 20px;
+    min-height: auto;
+  }
+
+  .bg-primary > div {
+    padding-left: 0;
+  }
+
+  .bg-primary h1 {
+    font-size: 32px !important;
+  }
+
+  .login-container > div:last-child {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .login-form {
+    width: 100%;
+    max-width: 420px;
+  }
 }

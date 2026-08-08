@@ -6,14 +6,28 @@ import { GetLoggedInUser } from "../apicalls/users";
 import { SetNotifications, SetUser } from "../redux/usersSlice";
 import { SetLoading } from "../redux/loadersSlice";
 import { GetAllNotifications } from "../apicalls/notifications";
-import { Avatar, Badge } from "antd";
+import { Avatar, Badge, Dropdown, Menu } from "antd";
 import Notifications from "./Notifications";
 
 function ProtectedPage({ children }) {
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, notifications } = useSelector((state) => state.users);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add("dark-mode");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.body.classList.remove("dark-mode");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDarkMode]);
+
   const getUser = async () => {
     try {
       dispatch(SetLoading(true));
@@ -64,56 +78,112 @@ function ProtectedPage({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  const profileMenu = (
+    <Menu
+      items={[
+        {
+          key: "profile",
+          label: "Profile",
+          onClick: () => navigate("/profile"),
+        },
+        {
+          key: "discover",
+          label: "Discover",
+          onClick: () => navigate("/discover"),
+        },
+        {
+          key: "dashboard",
+          label: "Dashboard",
+          onClick: () => navigate("/dashboard"),
+        },
+        {
+          key: "calendar",
+          label: "Calendar",
+          onClick: () => navigate("/calendar"),
+        },
+        {
+          type: "divider",
+        },
+        {
+          key: "logout",
+          label: "Logout",
+          danger: true,
+          onClick: () => {
+            localStorage.removeItem("token");
+            navigate("/login");
+          },
+        },
+      ]}
+    />
+  );
+
   return (
     user && (
       <div>
-        <div className="flex justify-between items-center bg-primary text-white px-5 py-4">
-          <h1 className="text-2xl cursor-pointer" onClick={() => navigate("/")}>
+        <div className="app-header flex justify-between items-center px-5 py-4">
+          <h1
+            className="app-logo text-2xl cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             ProjectManager
           </h1>
 
-          <div className="flex items-center bg-white px-5 py-2 rounded">
-            <span
-              className=" text-primary cursor-pointer underline mr-2"
-              onClick={() => navigate("/profile")}
-            >
-              {user?.firstName}
-            </span>
+          <div className="header-right flex items-center gap-4">
+            <nav className="header-nav hidden md:flex items-center gap-4">
+              <span
+                className="header-nav-link cursor-pointer"
+                onClick={() => navigate("/")}
+              >
+                Home
+              </span>
+              <span
+                className="header-nav-link cursor-pointer"
+                onClick={() => navigate("/dashboard")}
+              >
+                Dashboard
+              </span>
+              <span
+                className="header-nav-link cursor-pointer"
+                onClick={() => navigate("/calendar")}
+              >
+                Calendar
+              </span>
+              <span
+                className="header-nav-link cursor-pointer"
+                onClick={() => navigate("/discover")}
+              >
+                Discover
+              </span>
+            </nav>
+
+            <div className="theme-toggle cursor-pointer" onClick={() => setIsDarkMode(!isDarkMode)}>
+              {isDarkMode ? (
+                <i className="ri-sun-line header-toggle-icon"></i>
+              ) : (
+                <i className="ri-moon-line header-toggle-icon"></i>
+              )}
+            </div>
+
             <Badge
-              count={
-                notifications.filter((notification) => !notification.read)
-                  .length
-              }
+              count={notifications.filter((notification) => !notification.read).length}
               className="cursor-pointer"
             >
               <Avatar
                 shape="square"
                 size="large"
-                icon={
-                  <i className="ri-notification-line text-white rounded-full"></i>
-                }
-                onClick={() => {
-                  setShowNotifications(true);
-                }}
+                icon={<i className="ri-notification-line text-white rounded-full"></i>}
+                onClick={() => setShowNotifications(true)}
               />
             </Badge>
 
-            <span
-              className="text-primary cursor-pointer underline mr-5"
-              onClick={() => navigate("/discover")}
-            >
-              Discover
-            </span>
-            <i
-              className="ri-logout-box-r-line ml-5 text-primary"
-              onClick={() => {
-                localStorage.removeItem("token");
-                navigate("/login");
-              }}
-            ></i>
+            <Dropdown overlay={profileMenu} trigger={["click"]}>
+              <span className="header-user cursor-pointer underline">
+                {user?.firstName}
+              </span>
+            </Dropdown>
           </div>
         </div>
-        <div className="px-5 py-3">{children}</div>
+        <div className="px-5 py-3 app-content">{children}</div>
 
         {showNotifications && (
           <Notifications

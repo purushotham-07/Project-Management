@@ -20,3 +20,26 @@
 .members-table {
   margin-top: 20px;
 }
+
+/* Dark mode */
+.dark-mode .members-container {
+  color: #e8e8e8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .members-container {
+    padding: 12px;
+  }
+
+  .members-role-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .members-role-select {
+    margin-left: 0;
+    width: 100%;
+  }
+}
